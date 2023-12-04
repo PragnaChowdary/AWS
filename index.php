@@ -1,16 +1,15 @@
-
 <?php
 require('dbconn.php');
 ?>
 
 <?php
 
-                             	$rollno = $_SESSION['RollNo'];
+                              $rollno = $_SESSION['RollNo'];
                                 $sql="select * from LMS.user where RollNo='$rollno'";
                                 $result=$conn->query($sql);
                                 $row=$result->fetch_assoc();
-                              	
-                              	$type = $row['Type'];
+                                
+                                $type = $row['Type'];
 
                                 // $name=$row['Name'];
                                 // $category=$row['Category'];
@@ -30,223 +29,392 @@ if($rollno == NULL){
 echo header("location:../");
 }
 
-	?>
+  ?>
 
 
-<html>
-    <head>
-    	<input type="hidden" name="type" value="<?php echo $type?>">
-	  <meta charset="utf-8">
-	  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	  <title>QR Code | Log in</title>
-	  <!-- Tell the browser to be responsive to screen width -->
-	  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-		<script type="text/javascript" src="js/instascan.min.js"></script>
-		<!-- DataTables -->
-		<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-		<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-		<link rel="stylesheet" href="css/bootstrap.min.css">
-		<style>
-		#divvideo{
-			 box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
-		}
-		</style>
-    </head>
-    <body style="background:#eee">
-        <nav class="navbar" style="background:#2c3e50">
-		  <div class="container-fluid">
-			<div class="navbar-header">
-			  <a class="navbar-brand" href="index.php"> <i class="glyphicon glyphicon-qrcode"></i>  QR Code Attendance</a>
-			</div>
-		<ul class="nav navbar-nav">
-			  <li class="active"><a href="index.php"><span class="glyphicon glyphicon-home"></span> Home</a></li>
-			 
-			   			   
-			  <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Maintenance <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-
-				  <li><a href="add.php"><span class="glyphicon glyphicon-plus-sign"></span> Add Users</a></li>
-				  <li><a href="attendance.php"><span class="glyphicon glyphicon-calendar"></span> Attendance</a></li>
-				  	 <li><a href="edit.php"><span class="glyphicon glyphicon-plus-sign"></span> Users</a></li>
-				  	
-				</ul>
-			  </li>
-			  <li><a href="../card/index.php"><span class="glyphicon glyphicon-cog"></span> Create Library Card</a></li>
-			  
 
 
-			    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span> Back to LMS Control Panel <span class="caret"></span></a>
-				<ul class="dropdown-menu">
-				 <!--  <li><a href="#"><span class="glyphicon glyphicon-user"></span> Student</a></li> -->
-				  <li><a href="../admin/index.php"><span class="glyphicon glyphicon-plus-sign"></span>Admin</a></li>
-				  <li><a href="../librarian/index.php"><span class="glyphicon glyphicon-plus-sign"></span>Librarian</a></li>
-				  	 <li><a href="../staff/index.php"><span class="glyphicon glyphicon-plus-sign"></span> Staff</a></li>
-				</ul>
-			 <!--  <li><a href="#"><span class="glyphicon glyphicon-align-justify"></span> Reports</a></li> -->
-			 <!--  <li><a href="#"><span class="glyphicon glyphicon-time"></span>Students</a></li> -->
-			</ul>
-			<ul class="nav navbar-nav navbar-right">
-			  <!--<li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
-			<!--   <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
-			</ul>
-		  </div>
-		</nav>
-       <div class="container">
-            <div class="row">
-                <div class="col-md-4" style="padding:10px;background:#fff;border-radius: 5px;" id="divvideo">
-					<center><p class="login-box-msg"> <i class="glyphicon glyphicon-camera"></i> TAP HERE</p></center>
-                    <video id="preview" width="100%" height="50%" style="border-radius:10px;"></video>
-					<br>
-					<br>
-					<?php
-					if(isset($_SESSION['error'])){
-					  echo "
-						<div class='alert alert-danger alert-dismissible' style='background:red;color:#fff'>
-						  <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-						  <h4><i class='icon fa fa-warning'></i> Error!</h4>
-						  ".$_SESSION['error']."
-						</div>
-					  ";
-					  unset($_SESSION['error']);
-					}
-					if(isset($_SESSION['success'])){
-					  echo "
-						<div class='alert alert-success alert-dismissible' style='background:green;color:#fff'>
-						  <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-						  <h4><i class='icon fa fa-check'></i> Success!</h4>
-						  ".$_SESSION['success']."
-						</div>
-					  ";
-					  unset($_SESSION['success']);
-					}
-				  ?>
 
-                </div>
-				
-                <div class="col-md-8">
-                <form action="CheckInOut.php" method="post" class="form-horizontal" style="border-radius: 5px;padding:10px;background:#fff;" id="divvideo">
-                     <i class="glyphicon glyphicon-qrcode"></i> <label>SCAN QR CODE</label> <p id="time"></p>
-                    <input type="text" name="studentID" id="text" placeholder="scan qrcode" class="form-control"   autofocus>
-                </form>
-				<div style="border-radius: 5px;padding:10px;background:#fff;" id="divvideo">
-					 <form action="excel.php" method="post">
-                                    <input type="submit" name="export_excel" class="btn btn-success" value="Export to Excel">
-                                </form>
-                  <table id="example1" class="table table-bordered">
-                    <thead>
-                        <tr>
-						<td>NAME</td>
-						<td>USER'S ID</td>
-					<!-- 	<td>DEPARTMENT</td> -->
-						<td>TIME IN</td>
-						<td>TIME OUT</td>
-						<td>LOGDATE</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $server = "localhost";
-                        $username="root";
-                        $password="";
-                        $dbname="qrcodedb";
-                    
-                        $conn = new mysqli($server,$username,$password,$dbname);
-						$date = date('Y-m-d');
-                        if($conn->connect_error){
-                            die("Connection failed" .$conn->connect_error);
-                        }
-                           $sql ="SELECT * FROM attendance LEFT JOIN student ON attendance.STUDENTID=student.STUDENTID WHERE LOGDATE='$date'";
-                           $query = $conn->query($sql);
-                           while ($row = $query->fetch_assoc()){
-                        ?>
-                            <tr>
-                                <td><?php echo $row['FIRSTNAME'];?></td>
-                                <td><?php echo $row['STUDENTID'];?></td>
-                              <!--   <td><?php echo $row['DEPARTMENT'];?></td> -->
-                                <td><?php echo $row['TIMEIN'];?></td>
-                                <td><?php echo $row['TIMEOUT'];?></td>
-                                <td><?php echo $row['LOGDATE'];?></td>
-                            </tr>
-                        <?php
-                        }
-                        ?>
-                    </tbody>
-                  </table>
-				  
-                </div>
-				
-                </div>
-				<!-- <button style="color: green;" type="submit" class="btn btn-sucess pull-right" onclick="Export()">
-					<i class="fa fa-file-excel-o fa-fw"  >Export to Excel</i>
-				</button> -->
-            </div>
-						
+
+
+<?php  
+
+// Connect to the Database 
+include('config.php');
+
+$insert = false;
+$update = false;
+$empty = false;
+$delete = false;
+$already_card = false;
+
+
+
+if(isset($_GET['delete'])){
+  $sno = $_GET['delete'];
+  $delete = true;
+  $sql = "DELETE FROM `cards` WHERE `sno` = $sno";
+  $result = mysqli_query($conn, $sql);
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if (isset( $_POST['snoEdit'])){
+      // Update the record
+        $sno = $_POST["snoEdit"];
+        $name = $_POST["nameEdit"];
+        $id_no = $_POST["id_noEdit"];
+
+      // Sql query to be executed
+      $sql = "UPDATE `cards` SET `name` = '$name' , `id_no` = '$id_no' WHERE `cards`.`sno` = $sno";
+      $result = mysqli_query($conn, $sql);
+      if($result){
+        $update = true;
+    }
+    else{
+        echo "We could not update the record successfully";
+    }
+}
+else{
+    $name = $_POST["name"];
+    $id_no = $_POST["id_no"];
+    $grade = $_POST['grade'];
+    $dob = $_POST['dob'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+    $exp_date = $_POST['exp_date'];
+    $phone = $_POST['phone'];
+
+    if($name == '' || $id_no == ''){
+        $empty = true;
+    }
+    else{
+        //Check that Card no. is Already Registerd or not.
+        $querry = mysqli_query($conn, "SELECT * FROM cards WHERE id_no= '$id_no' ");
+        if(mysqli_num_rows($querry)>0)
+        {
+             $already_card = true;
+        }
+        else{
+
+
+          // image upload 
+          $uploaddir = 'assets/uploads/';
+          $uploadfile = $uploaddir . basename($_FILES['image']['name']);
+
+      
+          if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile)) {
+              
+          } else {
+              echo "Possible file upload attack!\n";
+          }
+  // Sql query to be executed
+  $sql = "INSERT INTO `cards`(`name`,`grade`, `id_no`, `email`, `phone`, `address`, `dob`, `exp_date`, `image`) VALUES ('$name','$grade','$id_no','$email','$phone','$address','$dob','$exp_date','$uploadfile')"; 
+
+  // $sql = "INSERT INTO `cards` (`name`, `id_no`) VALUES ('$name', '$id_no')";
+  $result = mysqli_query($conn, $sql);
+
+
+
+   
+  if($result){ 
+      $insert = true;
+  }
+  else{
+      echo "The record was not inserted successfully because of this error ---> ". mysqli_error($conn);
+  } 
+}
+}
+}
+
+ }
+?>
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="icon" type="image/png" href="images/favicon.png"/>
+  <title>LIBRARY CARD & QR GENERATOR</title>
+
+</head>
+
+<body>
+ 
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit This Card</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-		<script>
-			function Export()
-			{
-				var conf = confirm("Please confirm if you wish to proceed in exporting the attendance in to Excel File");
-				if(conf == true)
-				{
-					window.open("export.php");
-				}
-			}
-		</script>				
-        <script>
-           let scanner = new Instascan.Scanner({ video: document.getElementById('preview')});
-           Instascan.Camera.getCameras().then(function(cameras){
-               if(cameras.length > 0 ){
-                   scanner.start(cameras[0]);
-               } else{
-                   alert('No cameras found');
-               }
+        <form method="POST">
+          <div class="modal-body">
+            <input type="hidden" name="snoEdit" id="snoEdit">
+            <div class="form-group">
+              <label for="name">Student Name</label>
+              <input type="text" class="form-control" id="nameEdit" name="nameEdit">
+            </div>
 
-           }).catch(function(e) {
-               console.error(e);
-           });
+            <div class="form-group">
+              <label for="desc">ID Card Number:</label>
+              <input class="form-control" id="id_noEdit" name="id_noEdit" rows="3"></input>
+            </div> 
+          </div>
+          <div class="modal-footer d-block mr-auto">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
-           scanner.addListener('scan',function(c){
-               document.getElementById('text').value=c;
-               document.forms[0].submit();
-           });
-        </script>
-		<script type="text/javascript">
-			date_default_timezone_set('Asia/Manila');
-		var timestamp = '<?=time();?>';
-		function updateTime(){
-		  $('#time').html(Date(timestamp));
-		  timestamp++;
-		}
-		$(function(){
-		  setInterval(updateTime, 1000);
-		});
-		</script>
-		<script src="plugins/jquery/jquery.min.js"></script>
-		<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-		<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-		<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-		<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-		<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<!-- Navigation bar start  -->
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-image: linear-gradient(to right, rgb(0,300,255), rgb(93,4,217));">
+  <a class="navbar-brand" href="#"><img src="assets/images/codingcush-logo.png" alt=""></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-		<script>
-		  $(function () {
-			$("#example1").DataTable({
-			  "responsive": true,
-			  "autoWidth": false,
-			});
-			$('#example2').DataTable({
-			  "paging": true,
-			  "lengthChange": false,
-			  "searching": false,
-			  "ordering": true,
-			  "info": true,
-			  "autoWidth": false,
-			  "responsive": true,
-			});
-		  });
-		</script>
-		
-    </body>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      
+     
+   
+      
+    </ul>
+  
+  </div>
+</nav>
+<!-- Navigation bar end  -->
+
+  <?php
+  if($insert){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your Card has been inserted successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <?php
+  if($delete){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your Card has been deleted successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <?php
+  if($update){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your Card has been updated successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+   <?php
+  if($empty){
+    echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+    <strong>Error!</strong> The Fields Cannot Be Empty! Please Give Some Values.
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+     <?php
+  if($already_card){
+    echo "<div class='alert alert-warning alert-dismissible fade show' role='alert'>
+    <strong>Error!</strong> This Card is Already Added.
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <div class="container my-4">
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+  <i class="fa fa-plus"></i> Add New Card
+  </button>
+  <a href="id-card.php" class="btn btn-primary">
+  <i class="fa fa-address-card"></i> Generate ID Card
+</a>
+  <a href="generator.php" class="btn btn-primary">
+  <i class="fa fa-address-card"></i> Generate QR
+</a>
+<a href="../qr/index.php" class="btn btn-primary">
+  <i class="fa fa-plus"></i> Back to QR SCAN
+</a>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+
+    <form method="POST" enctype="multipart/form-data">
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">Student Name</label>
+        <input type="text" name="name" class="form-control" id="inputCity">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="inputState">Department</label>
+        <select name="grade" class="form-control">
+          <option selected>Choose...</option>
+          <option value="Computer Studies">Computer Studies</option>
+              <option value="Education">Education</option>
+              <option value="Agriculture">Argiculture</option>
+              <option val ue="Jr.High School">Jr.High School</option>
+              <option value="Sr.High School">Sr.High School</option>  
+        </select>
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Category</label>
+         <select name="dob" class="form-control">
+          <option selected>Choose...</option>
+          <option value="Student">Student</option>
+              <option value="Staff">Staff</option>
+              <option value="Faculty">Faculty</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">Address</label>
+        <input type="text" name="address" class="form-control">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="inputState">Email Id</label>
+        <input type="text" name="email" class="form-control">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Date Of Birth</label>
+        <input type="input" name="exp_date" class="form-control">
+      </div>
+    </div>
+      
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label for="id_no">ID Card No.</label>
+          <input class="form-control" id="id_no" name="id_no" ></input>
+        </div>
+        <div class="form-group col-md-3">
+          <label for="phone">Phone No.</label>
+          <input class="form-control" id="phone" name="phone" ></input>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="photo">Photo</label>
+          <input type="file" name="image" required />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary"><i class="fa fa-plus"></i> Add Card</button>
+    </form>
+  </div>
+</div>
+
+  <div class="container my-4">
+
+
+    <table class="table" id="myTable">
+      <thead>
+        <tr>
+          <th scope="col">S.No</th>
+          <th scope="col">Name</th>
+          <th scope="col">ID Card No.</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php 
+          $sql = "SELECT * FROM `cards` order by 1 DESC";
+          $result = mysqli_query($conn, $sql);
+          $sno = 0;
+          while($row = mysqli_fetch_assoc($result)){
+            $sno = $sno + 1;
+            echo "<tr>
+            <th scope='row'>". $sno . "</th>
+            <td>". $row['name'] . "</td>
+            <td>". $row['id_no'] . "</td>
+            <td> <button class='edit btn btn-sm btn-primary' id=".$row['sno'].">Edit</button> <button class='delete btn btn-sm btn-primary' id=d".$row['sno'].">Delete</button>  </td>
+          </tr>";
+        } 
+          ?>
+
+
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+
+    });
+  </script>
+  <script>
+    edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        console.log("edit ");
+        tr = e.target.parentNode.parentNode;
+        name = tr.getElementsByTagName("td")[0].innerText;
+        id_no = tr.getElementsByTagName("td")[1].innerText;
+        console.log(name, id_no);
+        nameEdit.value = name;
+        id_noEdit.value = id_no;
+        snoEdit.value = e.target.id;
+        console.log(e.target.id)
+        $('#editModal').modal('toggle');
+      })
+    })
+
+    deletes = document.getElementsByClassName('delete');
+    Array.from(deletes).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        console.log("edit ");
+        sno = e.target.id.substr(1);
+
+        if (confirm("Are you sure you want to delete this note!")) {
+          console.log("yes");
+          window.location = `index.php?delete=${sno}`;
+          // TODO: Create a form and use post request to submit a form
+        }
+        else {
+          console.log("no");
+        }
+      })
+    })
+  </script>
+</body>
+
 </html>
-
